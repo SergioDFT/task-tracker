@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import prisma from "@/lib/prisma";
 
-export async function GET(req: NextRequest, { params }: { params: { [key: string]: string } }) {
+export async function GET(req: NextRequest,  { params }: { params: { id: string }} ) {
   const { id } = params;
   const { userId } = await auth();
 
@@ -28,7 +28,7 @@ export async function GET(req: NextRequest, { params }: { params: { [key: string
   }
 }
 
-export async function PUT(req: NextRequest, { params }: { params: { [key: string]: string } }) {
+export async function PUT(req: NextRequest, { params }: { params: { id: string }}) {
   const { id } = params;
   const { userId } = await auth();
 
@@ -61,7 +61,7 @@ export async function PUT(req: NextRequest, { params }: { params: { [key: string
   }
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { [key: string]: string } }) {
+export async function DELETE(req: NextRequest, { params }: { params: { id: string }}) {
   const { id } = params;
   const { userId } = await auth();
 
