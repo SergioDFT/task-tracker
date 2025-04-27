@@ -2,8 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import prisma from "@/lib/prisma";
 
-export async function GET(req: NextRequest, context: { params: { id: string } }) {
-    const { params } = context;
+export async function GET(
+    req: NextRequest,
+    { params }: { params: Record<string, string> }
+) {
     const { userId } = await auth();
 
     if (!userId) {
@@ -34,7 +36,7 @@ export async function GET(req: NextRequest, context: { params: { id: string } })
 
 export async function PUT(
     req: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Record<string, string> }
 ) {
     const { userId } = await auth();
 
@@ -75,7 +77,7 @@ export async function PUT(
 
 export async function DELETE(
     req: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Record<string, string> }
 ) {
     const { userId } = await auth();
 
