@@ -3,7 +3,11 @@ import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 const protectedRoutes = createRouteMatcher(['/dashboard(.*)', '/tasks(.*)']);
 
 export default clerkMiddleware(async (auth, req) => {
-  if(protectedRoutes(req)) await auth.protect()
+  const { userId, redirectToSignIn } = await auth();
+
+  if (!userId && protectedRoutes(req)) {
+    return redirectToSignIn();
+  }
 });
 
 export const config = {
@@ -12,3 +16,4 @@ export const config = {
     '/(api|trpc)(.*)',
   ],
 };
+
