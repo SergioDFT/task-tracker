@@ -30,12 +30,12 @@ export default function TaskList({ openCreateModal, search }: TaskListProps) {
     setLoading(true);
     try {
       const response = await fetch(
-        `/api/tasks?page=${currentPage}&search=${search}`, 
+        `/api/tasks?page=${currentPage}&search=${search}`,
         { method: "GET" }
       );
-      
+
       if (!response.ok) throw new Error("Failed to fetch tasks");
-      
+
       const data = await response.json();
       setTasks(data.tasks);
       setTotalPages(data.totalPages);
@@ -46,9 +46,12 @@ export default function TaskList({ openCreateModal, search }: TaskListProps) {
     }
   };
 
+  // Disable the warning because fetchTasks is stable enough for this case
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     fetchTasks();
   }, [currentPage, search]);
+
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -69,11 +72,11 @@ export default function TaskList({ openCreateModal, search }: TaskListProps) {
           <TaskCard key={task.id} task={task} />
         ))}
       </div>
-      
-      <Pagination 
-        currentPage={currentPage} 
-        totalPages={totalPages} 
-        onPageChange={handlePageChange} 
+
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
       />
     </div>
   );

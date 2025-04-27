@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
       title: `Task: ${task.title}`,
       description: task.description || "View task details",
     };
-  } catch (error) {
+  } catch (_error) {
     return {
       title: "Task Details",
       description: "View and manage your task",
