@@ -58,7 +58,7 @@ export async function POST(req: Request) {
     const { id, username, email_addresses } = evt.data;
     console.log("Our User ", id, username, email_addresses);
     //call server action to create user to database
-    const user = await prisma.user.create({
+    await prisma.user.create({
       data: {
         clerkUserId: id,
         username: username,
@@ -73,7 +73,7 @@ export async function POST(req: Request) {
     console.log("Our deleted user details:", id);
 
     //call server action to delete user from database
-    const user = await prisma.user.delete({
+    await prisma.user.delete({
       where: {
         clerkUserId: id,
       },
@@ -85,7 +85,7 @@ export async function POST(req: Request) {
     const { id, username, email_addresses } = evt.data;
 
     //call server action to update user on the database
-    const user = await prisma.user.update({
+    await prisma.user.update({
       where: {
         clerkUserId: id,
       },
