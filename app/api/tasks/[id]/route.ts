@@ -5,7 +5,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string }}) {
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }>}) {
   const { userId } = await auth();
 
   if (!userId) {
@@ -13,7 +13,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
   }
 
   try {
-    const id = params.id;
+    const { id } = await params;
     const { title, description, status } = await req.json();
     const task = await prisma.task.findUnique({ where: { id } });
 
@@ -37,7 +37,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
   }
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { id: string }}) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }>}) {
   const { userId } = await auth();
 
   if (!userId) {
@@ -45,7 +45,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
   }
 
   try {
-    const id = params.id;
+    const { id } = await params;
     const task = await prisma.task.findUnique({ where: { id } });
 
     if (!task) {
