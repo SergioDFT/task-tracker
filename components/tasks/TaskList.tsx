@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import TaskCard from "./TaskCard";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import EmptyState from "../ui/EmptyState";
@@ -26,16 +26,13 @@ export default function TaskList({ openCreateModal, search }: TaskListProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  const fetchTasks = async () => {
+  const fetchTasks = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await fetch(
-        `/api/tasks?page=${currentPage}&search=${search}`,
-        { method: "GET" }
-      );
-
+      const response = await fetch(`/api/tasks?page=${currentPage}&search=${search}`, { method: "GET" });
+  
       if (!response.ok) throw new Error("Failed to fetch tasks");
-
+  
       const data = await response.json();
       setTasks(data.tasks);
       setTotalPages(data.totalPages);
@@ -44,13 +41,11 @@ export default function TaskList({ openCreateModal, search }: TaskListProps) {
     } finally {
       setLoading(false);
     }
-  };
-
-  // Disable the warning because fetchTasks is stable enough for this case
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage, search]);
+  
   useEffect(() => {
     fetchTasks();
-  }, [currentPage, search]);
+  }, [fetchTasks]);
 
 
   const handlePageChange = (page: number) => {
