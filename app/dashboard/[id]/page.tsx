@@ -1,3 +1,4 @@
+"use client";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { ArrowLeftIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
@@ -5,10 +6,6 @@ import Link from "next/link";
 import StatusBadge from "@/components/tasks/StatusBadge";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import DeleteConfirmationModal from "@/components/tasks/DeleteConfirmationModal";
-
-// Since we need client-side functionality but want to keep the page component server-side,
-// we'll need to add a minimal client wrapper component here
-"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
