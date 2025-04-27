@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import prisma from "@/lib/prisma";
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: { [key: string]: string } }) {
   const { id } = params;
   const { userId } = await auth();
 
@@ -28,7 +28,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
   }
 }
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest, { params }: { params: { [key: string]: string } }) {
   const { id } = params;
   const { userId } = await auth();
 
@@ -61,7 +61,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
   }
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, { params }: { params: { [key: string]: string } }) {
   const { id } = params;
   const { userId } = await auth();
 
@@ -80,9 +80,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    await prisma.task.delete({
-      where: { id },
-    });
+    await prisma.task.delete({ where: { id } });
 
     return NextResponse.json({ message: "Todo deleted successfully" });
   } catch (err) {
