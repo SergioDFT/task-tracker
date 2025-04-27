@@ -2,10 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import prisma from "@/lib/prisma";
 
-export async function GET(
-    req: NextRequest,
-    { params }: { params: Record<string, string> }
-) {
+interface Context {
+    params: {
+      id: string;
+    };
+  }
+
+export async function GET( req: NextRequest,context: Context ) {
+    const { id } = context.params;
     const { userId } = await auth();
 
     if (!userId) {
@@ -13,7 +17,7 @@ export async function GET(
     }
 
     try {
-        const taskId = params.id;
+        const taskId = id;
 
         const task = await prisma.task.findUnique({
             where: { id: taskId },
@@ -34,10 +38,8 @@ export async function GET(
     }
 }
 
-export async function PUT(
-    req: NextRequest,
-    { params }: { params: Record<string, string> }
-) {
+export async function PUT( req: NextRequest,context: Context ) {
+    const { id } = context.params;
     const { userId } = await auth();
 
     if (!userId) {
@@ -46,7 +48,7 @@ export async function PUT(
 
     try {
         const { title, description, status } = await req.json();
-        const taskId = params.id;
+        const taskId = id;
 
         const task = await prisma.task.findUnique({
             where: { id: taskId },
@@ -75,10 +77,8 @@ export async function PUT(
     }
 }
 
-export async function DELETE(
-    req: NextRequest,
-    { params }: { params: Record<string, string> }
-) {
+export async function DELETE( req: NextRequest,context: Context ) {
+    const { id } = context.params;
     const { userId } = await auth();
 
     if (!userId) {
@@ -86,7 +86,7 @@ export async function DELETE(
     }
 
     try {
-        const taskId = params.id;
+        const taskId = id;
 
         const task = await prisma.task.findUnique({
             where: { id: taskId },
