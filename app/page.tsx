@@ -5,7 +5,7 @@ import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import { LandingPage } from "@/components/landing/LandingPage";
 
 export const metadata = {
-  title: "Task Dashboard",
+  title: "Task Tracker",
   description: "Manage your tasks efficiently",
 };
 
