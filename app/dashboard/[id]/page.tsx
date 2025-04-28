@@ -28,9 +28,10 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
   }
 }
 
-export default async function TaskDetailPage({ params }: { params: { id: string } }) {
+export default async function TaskDetailPage({ params }: { params: Promise<{ id: string }> }) {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/tasks/${params.id}`, {
+    const { id } = await params;
+    const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/tasks/${id}`, {
       cache: "no-store",
     });
 
