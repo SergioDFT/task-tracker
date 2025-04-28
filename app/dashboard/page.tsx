@@ -1,7 +1,16 @@
-export default function Page() {
+import { Suspense } from "react";
+import TaskDashboardClient from "@/components/tasks/TaskDashboardClient";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
+
+export const metadata = {
+  title: "Task Dashboard",
+  description: "Manage your tasks efficiently",
+};
+
+export default function DashboardPage() {
   return (
-  <div className="flex flex-col items-center">
-      dashboard
-  </div>
+    <Suspense fallback={<LoadingSpinner />}>
+      <TaskDashboardClient />
+    </Suspense>
   );
 }
