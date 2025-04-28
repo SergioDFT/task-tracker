@@ -23,7 +23,7 @@ export default function TaskCard({ task }: TaskCardProps) {
   };
 
   return (
-    <Link href={`/dashboard/${task.id}`}>
+    <Link href={`/tasks/${task.id}`}>
       <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden cursor-pointer border border-gray-100">
         <div className={`h-2 ${
           task.status === "completed" 

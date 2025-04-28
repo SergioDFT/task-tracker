@@ -10,7 +10,7 @@ interface TaskSearchHeaderProps {
 
 export default function TaskSearchHeader({ search, onSearchChange, openCreateModal }: TaskSearchHeaderProps) {
   return (
-    <header className="bg-white shadow-sm sticky top-0 z-10">
+    <header className="bg-white shadow-sm sticky top-0 z-60">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <h1 className="text-2xl font-bold text-gray-900">Task Dashboard</h1>
@@ -23,7 +23,7 @@ export default function TaskSearchHeader({ search, onSearchChange, openCreateMod
               <input
                 type="text"
                 placeholder="Search tasks..."
-                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-700"
                 value={search}
                 onChange={(e) => onSearchChange(e.target.value)}
               />

@@ -18,9 +18,19 @@ export async function GET(req: NextRequest) {
   const search = searchParams.get("search") || "";
 
   try {
+    // First find the user by clerkUserId
+    const user = await prisma.user.findUnique({
+      where: { clerkUserId: userId },
+    });
+
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    // Now use the internal user.id (not clerkUserId)
     const tasks = await prisma.task.findMany({
       where: {
-        userId,
+        userId: user.id,
         title: {
           contains: search,
           mode: "insensitive",
@@ -33,7 +43,7 @@ export async function GET(req: NextRequest) {
 
     const totalTasks = await prisma.task.count({
       where: {
-        userId,
+        userId: user.id,
         title: {
           contains: search,
           mode: "insensitive",
@@ -50,7 +60,7 @@ export async function GET(req: NextRequest) {
     });
   } catch (err) {
     return NextResponse.json(
-      { error: "Internal Server Error" + err},
+      { error: "Internal Server Error" + err },
       { status: 500 }
     );
   }
@@ -76,7 +86,7 @@ export async function POST(req: NextRequest) {
   const { title, description, status } = await req.json();
 
   const task = await prisma.task.create({
-    data: { title, description, status, userId },
+    data: { title, description, status, userId: user.id, },
   });
 
   return NextResponse.json(task, { status: 201 });
