@@ -5,7 +5,7 @@ import React from 'react'
 
 const Header = () => {
   return (
-    <div className="sticky top-0 z-50 bg-white shadow-md">
+    <div className="sticky top-0 z-40 bg-white shadow-md">
       <SignedIn>
         <div className="flex justify-end text-center p-4 bg-gradient-to-r from-slate-900 to-slate-800">
           <UserButton afterSignOutUrl="/" />
