@@ -56,35 +56,48 @@ export async function POST(req: Request) {
 
   if (eventType === "user.created") {
     const { id, username, email_addresses } = evt.data;
-    console.log("Our User ", id, username, email_addresses);
-    //call server action to create user to database
-    await prisma.user.create({
-      data: {
-        clerkUserId: id,
-        username: username,
-        email: email_addresses[0].email_address,
-      },
+    const user = await prisma.user.findUnique({
+      where: { clerkUserId: id },
     });
-    NextResponse.json("User created",{ status: 200 });
+
+    if (!user) {
+      await prisma.user.create({
+        data: {
+          clerkUserId: id,
+          username: username,
+          email: email_addresses[0].email_address,
+        },
+      });
+      NextResponse.json("User created", { status: 200 });
+    } else {
+      console.log("User already exists:", user);
+      return new Response("User already exists", { status: 400 });
+    }
   }
 
   if (eventType === "user.deleted") {
     const { id } = evt.data;
     console.log("Our deleted user details:", id);
 
-    //call server action to delete user from database
+    await prisma.task.deleteMany({
+      where: {
+        user: {
+          clerkUserId: id,
+        },
+      },
+    });
+
     await prisma.user.delete({
       where: {
         clerkUserId: id,
       },
     });
-    NextResponse.json("deleted successfully",{ status: 200 });
+    NextResponse.json("deleted successfully", { status: 200 });
   }
 
   if (eventType === "user.updated") {
     const { id, username, email_addresses } = evt.data;
 
-    //call server action to update user on the database
     await prisma.user.update({
       where: {
         clerkUserId: id,
