@@ -3,7 +3,7 @@
 A task management application built with **Next.js 14**, **TypeScript**, **Tailwind CSS**, custom authentication using **Upstash Redis**, and **PostgreSQL** (via **Neon** and **Prisma**).
 
 Deployed on **Vercel**:
-🔗 [Live Site](https://task-tracker-wine-xi.vercel.app/)
+🔗 [Live Site](https://task-tracker-auth-git-auth-sergios-projects-03bd13e1.vercel.app/)
 
 ---
 
@@ -147,7 +147,7 @@ Access: [http://localhost:3000](http://localhost:3000)
 * Production secrets configured in Vercel dashboard
 
 Live App:
-🔗 [https://task-tracker-wine-xi.vercel.app/](https://task-tracker-wine-xi.vercel.app/)
+🔗 [https://task-tracker-wine-xi.vercel.app/](https://task-tracker-auth-git-auth-sergios-projects-03bd13e1.vercel.app/)
 
 ---
 
