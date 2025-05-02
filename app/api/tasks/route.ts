@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { PrismaClient } from '@prisma/client';
+import { getCurrentUser } from "@/auth/nextjs/currentUser";
 
 const prisma = new PrismaClient();
 
 const ITEMS_PER_PAGE = 10;
 
 export async function GET(req: NextRequest) {
-  const { userId } = await auth();
+  const userId = await getCurrentUser({ withFullUser: false });
 
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
   try {
     // First find the user by clerkUserId
     const user = await prisma.user.findUnique({
-      where: { clerkUserId: userId },
+      where: { id: userId.id },
     });
 
     if (!user) {
@@ -67,14 +67,14 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const { userId } = await auth();
+  const userId = await getCurrentUser({ withFullUser: false });
 
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const user = await prisma.user.findUnique({
-    where: { clerkUserId: userId },
+    where: { id: userId.id },
     include: { tasks: true },
   });
   console.log("User:", user);

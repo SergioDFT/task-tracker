@@ -32,7 +32,6 @@ export default function CreateTaskModal({ isOpen, onClose, onTaskCreated }: Crea
 
       if (!response.ok) throw new Error("Failed to create task");
 
-      // Reset form and close modal
       setFormData({ title: "", description: "", status: "pending" });
       onClose();
       onTaskCreated();

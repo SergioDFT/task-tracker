@@ -1,21 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { PrismaClient } from '@prisma/client';
+import { getCurrentUser } from "@/auth/nextjs/currentUser";
 
 const prisma = new PrismaClient();
 
-async function getInternalUserId(clerkUserId: string) {
-    const user = await prisma.user.findUnique({
-        where: { clerkUserId },
-    });
-
-    if (!user) throw new Error("User not found");
-    return user.id;
-}
-
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-    const { userId: clerkUserId } = await auth();
-    if (!clerkUserId) {
+    const userId = await getCurrentUser({ withFullUser: false });
+    if (!userId) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -27,9 +18,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
             return NextResponse.json({ error: "Task not found" }, { status: 404 });
         }
 
-        const internalUserId = await getInternalUserId(clerkUserId);
-
-        if (task.userId !== internalUserId) {
+        if (task.userId !== userId.id) {
             return NextResponse.json({ error: "Forbidden" }, { status: 403 });
         }
 
@@ -41,8 +30,8 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 }
 
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-    const { userId: clerkUserId } = await auth();
-    if (!clerkUserId) {
+    const userId = await getCurrentUser({ withFullUser: false });
+    if (!userId) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -55,9 +44,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
             return NextResponse.json({ error: "Todo not found" }, { status: 404 });
         }
 
-        const internalUserId = await getInternalUserId(clerkUserId);
-
-        if (task.userId !== internalUserId) {
+        if (task.userId !== userId.id) {
             return NextResponse.json({ error: "Forbidden" }, { status: 403 });
         }
 
@@ -74,8 +61,8 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
 }
 
 export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-    const { userId: clerkUserId } = await auth();
-    if (!clerkUserId) {
+    const userId = await getCurrentUser({ withFullUser: false });
+    if (!userId) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -87,9 +74,7 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
             return NextResponse.json({ error: "Todo not found" }, { status: 404 });
         }
 
-        const internalUserId = await getInternalUserId(clerkUserId);
-
-        if (task.userId !== internalUserId) {
+        if (task.userId !== userId.id) {
             return NextResponse.json({ error: "Forbidden" }, { status: 403 });
         }
 

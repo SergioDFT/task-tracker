@@ -1,9 +1,9 @@
 import TaskDetailClient from "@/components/tasks/TaskDetailClient";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { auth } from "@clerk/nextjs/server";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
-import prisma from "@/lib/prisma"; // ← You need a prisma.ts inside lib/
+import prisma from "@/lib/prisma";
+import { getCurrentUser } from "@/auth/nextjs/currentUser";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   try {
@@ -30,24 +30,25 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 }
 
 export default async function TaskDetailPage({ params }: { params: Promise<{ id: string }> }) {
+
   try {
-    const { userId } = await auth();
+    const user = await getCurrentUser({ withFullUser: false, redirectIfNotFound: true });
     const { id } = await params;
 
-    if (!userId) {
+    if (!user) {
       notFound();
     }
 
     const taskFromDb = await prisma.task.findFirst({
       where: {
-        id: id, 
+        id: id,
         user: {
-          clerkUserId: userId, 
+          id: user.id,
         },
       },
     });
-    
-    if (!taskFromDb ) {
+
+    if (!taskFromDb) {
       notFound();
     }
 
@@ -56,8 +57,8 @@ export default async function TaskDetailPage({ params }: { params: Promise<{ id:
       title: taskFromDb.title,
       description: taskFromDb.description ?? undefined,
       status: taskFromDb.status,
-      createdAt: taskFromDb.createdAt.toISOString(), 
-      updatedAt: taskFromDb.updatedAt.toISOString(), 
+      createdAt: taskFromDb.createdAt.toISOString(),
+      updatedAt: taskFromDb.updatedAt.toISOString(),
     };
 
     return (

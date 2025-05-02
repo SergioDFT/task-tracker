@@ -1,8 +1,9 @@
-import { auth } from "@clerk/nextjs/server";
 import { Suspense } from "react";
 import TaskDashboardClient from "@/components/tasks/TaskDashboardClient";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import { LandingPage } from "@/components/landing/LandingPage";
+import { getCurrentUser } from "@/auth/nextjs/currentUser";
+import Header from "@/components/header/Header";
 
 export const metadata = {
   title: "Task Tracker",
@@ -10,10 +11,11 @@ export const metadata = {
 };
 
 export default async function Home() {
-  const { userId } = await auth();
+  const user = await getCurrentUser({withFullUser: false});
   return (
     <>
-      {userId ? (
+    <Header />
+      { user?.id ? (
         <Suspense fallback={<LoadingSpinner />}>
           <TaskDashboardClient />
         </Suspense>
